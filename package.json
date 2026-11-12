@@ -1,0 +1,13 @@
+{
+  "name": "arham-fintech-2",
+  "version": "1.0.0",
+  "description": "Simple Ride Booking System",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0"
+  }
+}
