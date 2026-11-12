@@ -3,6 +3,12 @@ const { randomUUID } = require('crypto');
 const eventBus = require('./eventBus');
 const { startDispatcher } = require('./dispatcher');
 
+// Load event consumers in-process so they share the same EventEmitter instance.
+// billing.js and ops.js rely on the module-level eventBus singleton; they must
+// run in the same process as the server for their listeners to receive events.
+require('../billing');
+require('../ops');
+
 const app = express();
 app.use(express.json());
 

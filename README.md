@@ -37,21 +37,17 @@ node src/server.js
 
 The server listens on **http://localhost:3000**.
 
-### 3. (Optional) Start event consumers in separate terminals
+### 3. Event consumers (included automatically)
 
-```bash
-# Terminal 2
-node billing.js
+`billing.js` and `ops.js` are required directly by `src/server.js` and start automatically
+when the server starts. They share the same in-memory `EventEmitter` instance and log
+to the server's stdout.
 
-# Terminal 3
-node ops.js
-```
-
-> **Note:** `billing.js` and `ops.js` import the shared `eventBus` module directly.  
-> They must run **in the same Node.js process** as the server to share the in-memory event bus.  
-> To use them as true separate processes you would need to replace the EventEmitter with  
-> a network-based message broker (e.g. Redis Pub/Sub). For this demo, run them in the same process  
-> or use them as reference for how the event wiring works.
+> **Note:** Because `billing.js` and `ops.js` rely on Node.js module caching to share the
+> `eventBus` singleton, they **must run in the same process** as the server. Running them
+> as standalone programs (`node billing.js`) in a separate terminal will not work — each
+> process gets its own independent EventEmitter and will never receive events from the server.
+> To support separate-process consumers you would need a network message broker (e.g. Redis Pub/Sub).
 
 ### 4. Run the load test
 
